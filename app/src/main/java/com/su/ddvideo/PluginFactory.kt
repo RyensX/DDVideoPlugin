@@ -1,9 +1,6 @@
 package com.su.ddvideo
 
-import com.su.ddvideo.components.Const
-import com.su.ddvideo.components.HomePageDataComponent
-import com.su.ddvideo.components.MediaDetailPageDataComponent
-import com.su.ddvideo.components.VideoPlayPageDataComponent
+import com.su.ddvideo.components.*
 import com.su.mediabox.pluginapi.components.*
 import com.su.mediabox.pluginapi.IPluginFactory
 
@@ -20,6 +17,7 @@ class PluginFactory : IPluginFactory() {
         IHomePageDataComponent::class.java -> HomePageDataComponent()
         IMediaDetailPageDataComponent::class.java -> MediaDetailPageDataComponent()
         IVideoPlayPageDataComponent::class.java -> VideoPlayPageDataComponent()
+        IMediaSearchPageDataComponent::class.java -> MediaSearchPageDataComponent()
         else -> null
     } as? T
 
