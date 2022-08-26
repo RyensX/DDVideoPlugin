@@ -85,6 +85,24 @@ class MediaDetailPageDataComponent : IMediaDetailPageDataComponent {
             }
         }
 
+        //更新状态
+        doc.getElementsByClass("entry")
+            .first()?.also {
+                data.add(SimpleTextData("更新状态").apply {
+                    fontSize = 16F
+                    fontColor = Color.WHITE
+                    spanSize = spanTotal
+                })
+                data.add(
+                    SimpleTextData(
+                        it.getElementsByTag("font").first()?.text() + " " + it.ownText()
+                    ).apply {
+                        fontSize = 14F
+                        fontColor = Color.WHITE
+                        spanSize = spanTotal
+                    })
+            }
+
         //季度
         val seasonList = mutableListOf<EpisodeData>()
         doc.getElementsByClass("page-links").first()?.children()?.forEach {
