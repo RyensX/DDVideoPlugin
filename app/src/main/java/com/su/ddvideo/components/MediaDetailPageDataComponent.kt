@@ -10,6 +10,7 @@ import com.su.mediabox.pluginapi.action.PlayAction
 import com.su.mediabox.pluginapi.action.WebBrowserAction
 import com.su.mediabox.pluginapi.components.IMediaDetailPageDataComponent
 import com.su.mediabox.pluginapi.data.*
+import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.pluginapi.util.WebUtilIns
 import org.jsoup.Jsoup
 
@@ -44,14 +45,24 @@ class MediaDetailPageDataComponent : IMediaDetailPageDataComponent {
 
                 val infoEmText = it.getElementsByClass("abstract").first()!!.text()
 
-                //标题
-                data.add(SimpleTextData(title).apply {
-                    fontColor = Color.WHITE
-                    fontSize = 20F
-                    fontStyle = 1
-                    spanSize = spanTotal
-                    gravity = Gravity.CENTER
+
+                //封面和信息
+                data.add(Cover1Data(cover, doubanScore).apply {
+                    spanSize = spanTotal * 1 / 3
+                    action = WebBrowserAction.obtain(doubanUrl)
                 })
+                data.add(
+                    SimpleTextData(
+                        "$title\n\n${
+                            infoEmText
+                                .let { it.substring(it.indexOf("导演"), it.indexOf("类型")) }
+                        }"
+                    )
+                        .apply {
+                            fontSize = 14F
+                            fontColor = Color.WHITE
+                            spanSize = spanTotal * 2 / 3
+                        })
 
                 //类别标签
                 val di = infoEmText.indexOf(descIndex) + descIndex.length
@@ -72,15 +83,11 @@ class MediaDetailPageDataComponent : IMediaDetailPageDataComponent {
                     })
                 }
 
-                //左侧封面
-                data.add(Cover1Data(cover, doubanScore).apply {
-                    spanSize = spanTotal * 1 / 3
-                    action = WebBrowserAction.obtain(doubanUrl)
-                })
-                //右侧介绍
-                data.add(SimpleTextData(infoEmText.substring(di)).apply {
+                //介绍
+                data.add(LongTextData(infoEmText.substring(di)).apply {
                     fontColor = Color.WHITE
-                    spanSize = spanTotal * 2 / 3
+                    spanSize = spanTotal
+                    paddingBottom = 8.dp
                 })
             }
         }
@@ -88,7 +95,7 @@ class MediaDetailPageDataComponent : IMediaDetailPageDataComponent {
         //更新状态
         doc.getElementsByClass("entry")
             .first()?.also {
-                data.add(SimpleTextData("更新状态").apply {
+                data.add(SimpleTextData("· 更新状态").apply {
                     fontSize = 16F
                     fontColor = Color.WHITE
                     spanSize = spanTotal
@@ -115,7 +122,7 @@ class MediaDetailPageDataComponent : IMediaDetailPageDataComponent {
             }
         }
         if (seasonList.isNotEmpty()) {
-            data.add(SimpleTextData("季度列表").apply {
+            data.add(SimpleTextData("· 季度列表").apply {
                 fontSize = 16F
                 fontColor = Color.WHITE
                 spanSize = spanTotal
@@ -139,7 +146,7 @@ class MediaDetailPageDataComponent : IMediaDetailPageDataComponent {
             }
         }
         if (playList.isNotEmpty()) {
-            data.add(SimpleTextData("播放列表").apply {
+            data.add(SimpleTextData("· 播放列表").apply {
                 fontSize = 16F
                 fontColor = Color.WHITE
                 spanSize = spanTotal
