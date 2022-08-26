@@ -20,10 +20,12 @@ class VideoPlayPageDataComponent : IVideoPlayPageDataComponent {
         //TODO 性能待优化
         val url = WebUtilIns.interceptResource(
             episodeUrl,
-            actionJs = """       
-	                const evt = document.createEvent('MouseEvent');
-	                evt.initEvent('click', false, false);
-	                document.getElementsByClassName('vjs-big-play-button')[0].dispatchEvent(evt);   
+            actionJs = """  
+                    setTimeout(function() {
+	                    const evt = document.createEvent('MouseEvent');
+	                    evt.initEvent('click', false, false);
+	                    document.getElementsByClassName('vjs-big-play-button')[0].dispatchEvent(evt);   
+                    },500);
             """.trimIndent(),
             //regex = "(.*)getvddr(.*)"
             regex = "(.*)filename(.*)"
