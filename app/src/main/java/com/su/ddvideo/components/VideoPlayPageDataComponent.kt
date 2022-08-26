@@ -29,16 +29,27 @@ class VideoPlayPageDataComponent : IVideoPlayPageDataComponent {
             val config = PluginPreferenceIns.get(OyydsDanmaku.OYYDS_DANMAKU_ENABLE, true)
             if (!config)
                 return null
-            val name = videoName.trimAll()
+            var name = videoName.trimAll()
+            //去除更新信息影响
+            val nameIndex = name.indexOf("(")
+            if (nameIndex != -1) {
+                name = name.substring(0, nameIndex)
+            }
             var episode = episodeName.trimAll()
             //剧集对集去除所有额外字符，增大弹幕适应性
             val episodeIndex = episode.indexOf("集")
             if (episodeIndex > -1 && episodeIndex != episode.length - 1) {
                 episode = episode.substring(0, episodeIndex + 1)
             }
+            //去除季度信息影响
+            val episodeIndex2 = episode.indexOf("季")
+            if (episodeIndex2 != -1 && episodeIndex2 != episode.length - 1) {
+                name += episode.substring(0, episodeIndex2 + 1)
+                episode = episode.substring(episodeIndex2 + 1)
+            }
             Log.d("请求Oyyds弹幕", "媒体:$name 剧集:$episode")
             return oyydsDanmakuApis.getDanmakuData(
-                name, episode,
+                name.trimAll(), episode.trimAll(),
                 OyydsDanmakuParser.getType(videoType)
             ).data.let { danmukuData ->
                 val data = mutableListOf<DanmakuItemData>()

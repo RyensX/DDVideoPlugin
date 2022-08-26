@@ -38,7 +38,7 @@ object OyydsDanmakuParser {
         return when {
             typeName.contains("电影") -> "2"
             typeName.contains("剧") -> "3"
-            typeName.contains("动漫") -> "1"
+            typeName.contains("动画") -> "1"
             else -> "6"
         }.also {
             Log.i("转换弹幕类型", "$typeName -> $it")
