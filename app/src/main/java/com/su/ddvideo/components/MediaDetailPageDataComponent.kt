@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.view.Gravity
 import com.su.ddvideo.util.JsoupUtil
 import com.su.ddvideo.util.Text.trimAll
+import com.su.mediabox.pluginapi.action.DetailAction
 import com.su.mediabox.pluginapi.action.PlayAction
 import com.su.mediabox.pluginapi.action.WebBrowserAction
 import com.su.mediabox.pluginapi.components.IMediaDetailPageDataComponent
@@ -72,6 +73,28 @@ class MediaDetailPageDataComponent : IMediaDetailPageDataComponent {
             }
         }
 
+        //季度
+        val seasonList = mutableListOf<EpisodeData>()
+        doc.getElementsByClass("page-links").first()?.children()?.forEach {
+            if (it.tagName() == "a") {
+                seasonList.add(EpisodeData(it.text(), "").apply {
+                    action = DetailAction.obtain(it.attr("href"))
+                })
+            } else {
+                seasonList.add(EpisodeData(">${it.text()}<", ""))
+            }
+        }
+        if (seasonList.isNotEmpty()) {
+            data.add(SimpleTextData("季度列表").apply {
+                fontSize = 16F
+                fontColor = Color.WHITE
+                spanSize = spanTotal
+            })
+            data.add(EpisodeListData(seasonList).apply {
+                spanSize = spanTotal
+            })
+        }
+
         //播放列表
         val playList = mutableListOf<EpisodeData>()
         doc.getElementsByClass("wp-playlist-item").forEach {
@@ -85,10 +108,16 @@ class MediaDetailPageDataComponent : IMediaDetailPageDataComponent {
                 })
             }
         }
-        if (playList.isNotEmpty())
+        if (playList.isNotEmpty()) {
+            data.add(SimpleTextData("播放列表").apply {
+                fontSize = 16F
+                fontColor = Color.WHITE
+                spanSize = spanTotal
+            })
             data.add(EpisodeListData(playList).apply {
                 spanSize = spanTotal
             })
+        }
 
 
         //配置
