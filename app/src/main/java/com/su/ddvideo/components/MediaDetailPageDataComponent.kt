@@ -1,6 +1,7 @@
 package com.su.ddvideo.components
 
 import android.graphics.Color
+import android.util.Log
 import android.view.Gravity
 import com.su.ddvideo.util.JsoupUtil
 import com.su.ddvideo.util.Text.trimAll
@@ -15,7 +16,7 @@ import org.jsoup.Jsoup
 class MediaDetailPageDataComponent : IMediaDetailPageDataComponent {
 
     companion object {
-        private val mouthRegex = Regex("[\\d]+")
+        private val tagRegex = Regex(" (.*?) ")
         private val descIndex = "简介: "
     }
 
@@ -52,24 +53,35 @@ class MediaDetailPageDataComponent : IMediaDetailPageDataComponent {
                     gravity = Gravity.CENTER
                 })
 
+                //类别标签
+                val di = infoEmText.indexOf(descIndex) + descIndex.length
+                val tags = mutableListOf<TagData>()
+                tagRegex.findAll(
+                    infoEmText.substring(
+                        infoEmText.indexOf("类型"),
+                        di - descIndex.length
+                    )
+                ).forEach { result ->
+                    result.groups[1]?.value?.also {
+                        tags.add(TagData(it))
+                    }
+                }
+                if (tags.isNotEmpty()) {
+                    data.add(TagFlowData(tags).apply {
+                        spanSize = spanTotal
+                    })
+                }
+
                 //左侧封面
                 data.add(Cover1Data(cover, doubanScore).apply {
                     spanSize = spanTotal * 1 / 3
                     action = WebBrowserAction.obtain(doubanUrl)
                 })
                 //右侧介绍
-                data.add(SimpleTextData(
-                    infoEmText.let { it.substring(it.indexOf(descIndex) + descIndex.length) })
-                    .apply {
-                        fontColor = Color.WHITE
-                        spanSize = spanTotal * 2 / 3
-                    })
-
-                //类别标签
-                val tags = mutableListOf<TagData>()
-
-                if (tags.isNotEmpty())
-                    data.add(TagFlowData(tags))
+                data.add(SimpleTextData(infoEmText.substring(di)).apply {
+                    fontColor = Color.WHITE
+                    spanSize = spanTotal * 2 / 3
+                })
             }
         }
 
