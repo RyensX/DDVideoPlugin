@@ -17,7 +17,7 @@ class MediaSearchPageDataComponent : IMediaSearchPageDataComponent {
 
         doc.getElementsByClass("row").forEach {
             runCatching {
-                val cover = it.getElementsByTag("img")[0].attr("src")
+                val cover = it.getElementsByTag("img").first()?.attr("src") ?: ""
                 it.getElementsByClass("post-content").first()?.also { infoEm ->
                     val titleEm =
                         infoEm.getElementsByClass("post-title")[0].getElementsByTag("a")[0]
