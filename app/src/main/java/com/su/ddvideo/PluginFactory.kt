@@ -17,6 +17,10 @@ class PluginFactory : IPluginFactory() {
 
     override fun pluginLaunch() {
         PluginPreferenceIns.initKey(OyydsDanmaku.OYYDS_DANMAKU_ENABLE, defaultValue = true)
+        PluginPreferenceIns.initKey(
+            OyydsDanmaku.OYYDS_DANMAKU_PLATFORMS,
+            defaultValue = "base,rr,dandan"
+        )
     }
 
     override fun <T : IBasePageDataComponent> createComponent(clazz: Class<T>) = when (clazz) {

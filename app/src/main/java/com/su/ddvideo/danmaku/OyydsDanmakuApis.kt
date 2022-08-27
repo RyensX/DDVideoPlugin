@@ -1,15 +1,17 @@
 package com.su.ddvideo.danmaku
 
+import com.su.mediabox.pluginapi.util.PluginPreferenceIns
 import retrofit2.http.*
 
 interface OyydsDanmakuApis {
 
     @Headers("user-agent: MediaBox/DDVideo")
-    @GET("https://api.danmu.oyyds.top/api/message/getSomeV3?platforms=base,bilibili,dandan")
+    @GET("https://api.danmu.oyyds.top/api/message/getSomeV3")
     suspend fun getDanmakuData(
         @Query("keyword") keyword: String,
         @Query("number") number: String,
-        @Query("type") type: String
+        @Query("type") type: String,
+        @Query("platforms") platforms: String
     ): OyydsDanmaku
 
     @FormUrlEncoded

@@ -8,6 +8,7 @@ data class OyydsDanmaku(
 
     companion object {
         const val OYYDS_DANMAKU_ENABLE = "OYYDS弹幕"
+        const val OYYDS_DANMAKU_PLATFORMS = "OYYDS弹幕平台"
     }
 
     data class Data(

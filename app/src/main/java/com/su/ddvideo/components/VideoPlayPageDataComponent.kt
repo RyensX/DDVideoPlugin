@@ -49,8 +49,10 @@ class VideoPlayPageDataComponent : IVideoPlayPageDataComponent {
             }
             Log.d("请求Oyyds弹幕", "媒体:$name 剧集:$episode")
             return oyydsDanmakuApis.getDanmakuData(
-                name.trimAll(), episode.trimAll(),
-                OyydsDanmakuParser.getType(videoType)
+                name.trim(),
+                episode.trim(),
+                OyydsDanmakuParser.getType(videoType),
+                PluginPreferenceIns.get(OyydsDanmaku.OYYDS_DANMAKU_PLATFORMS, "base")
             ).data.let { danmukuData ->
                 val data = mutableListOf<DanmakuItemData>()
                 danmukuData?.data?.forEach { dataX ->
