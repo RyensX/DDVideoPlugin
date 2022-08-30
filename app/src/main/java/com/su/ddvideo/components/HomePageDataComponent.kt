@@ -6,6 +6,7 @@ import com.su.mediabox.pluginapi.action.DetailAction
 import com.su.mediabox.pluginapi.components.IHomePageDataComponent
 import com.su.mediabox.pluginapi.data.*
 import com.su.mediabox.pluginapi.util.UIUtil.dp
+import org.jsoup.nodes.Document
 
 class HomePageDataComponent : IHomePageDataComponent {
 
@@ -16,7 +17,12 @@ class HomePageDataComponent : IHomePageDataComponent {
     override suspend fun getData(page: Int): List<BaseData> =
         mutableListOf<BaseData>().apply {
             val url = "${host}/page/$page/"
-            JsoupUtil.getDocument(url).select("#main > div.post-box-list").first()?.children()
+            var doc: Document? = null
+            //重复两次
+            runCatching { doc = JsoupUtil.getDocument(url) }
+            if (doc == null)
+                doc = JsoupUtil.getDocument(url)
+            doc?.select("#main > div.post-box-list")?.first()?.children()
                 ?.forEach {
                     runCatching {
                         var cover =
