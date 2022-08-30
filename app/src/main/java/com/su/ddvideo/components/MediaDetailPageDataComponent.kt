@@ -34,9 +34,11 @@ class MediaDetailPageDataComponent : IMediaDetailPageDataComponent {
         //剧集信息
         doc.getElementsByClass("doulist-item").forEach {
             runCatching {
-                val cover = it.getElementsByClass("post").first()!!.child(0).attr("src")
-                if (bc == null)
+                val cover =
+                    it.getElementsByClass("post").first()!!.getElementsByTag("img").attr("src")
+                if (bc.isNullOrEmpty())
                     bc = cover
+                Log.i("封面", cover)
                 val titleEm = it.getElementsByClass("title").first()!!.child(0)
                 val title = titleEm.text()
                 val doubanUrl = titleEm.attr("href")
@@ -121,6 +123,7 @@ class MediaDetailPageDataComponent : IMediaDetailPageDataComponent {
                 seasonList.add(EpisodeData(">${it.text()}<", ""))
             }
         }
+        Log.i("季度列表数", seasonList.size.toString())
         if (seasonList.isNotEmpty()) {
             data.add(SimpleTextData("· 季度列表").apply {
                 fontSize = 16F
@@ -145,6 +148,7 @@ class MediaDetailPageDataComponent : IMediaDetailPageDataComponent {
                 })
             }
         }
+        Log.i("播放列表数", playList.size.toString())
         if (playList.isNotEmpty()) {
             data.add(SimpleTextData("· 播放列表").apply {
                 fontSize = 16F
@@ -159,6 +163,8 @@ class MediaDetailPageDataComponent : IMediaDetailPageDataComponent {
 
         //配置
         data[0].layoutConfig = BaseData.LayoutConfig(spanTotal)
+
+        Log.i("详情页数据", "背景:$bc 名称:$name 数据量:${data.size}")
 
         return Triple(bc ?: "", name, data)
     }
