@@ -22,7 +22,7 @@ class MediaDetailPageDataComponent : IMediaDetailPageDataComponent {
     }
 
     override suspend fun getMediaDetailData(url: String): Triple<String, String, List<BaseData>> {
-        val doc = Jsoup.parse(WebUtilIns.getRenderedHtmlCode(url))
+        val doc = Jsoup.parse(WebUtilIns.getRenderedHtmlCode(url, timeOut = 3000))
 
         val name = doc.getElementsByClass("post-title").first()!!.text()
         var bc: String? = null

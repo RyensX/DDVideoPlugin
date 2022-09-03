@@ -105,6 +105,9 @@ class VideoPlayPageDataComponent : IVideoPlayPageDataComponent {
             regex = "(.*)filename(.*)"
         )
 
+        if (url.isEmpty())
+            return VideoPlayMedia("", "")
+
 //        val vjson = Jsoup.connect(url).ignoreContentType(true)
 //            .header("referer", Const.host)
 //            .get().body().text().apply {
