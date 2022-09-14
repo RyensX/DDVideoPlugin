@@ -101,23 +101,13 @@ class VideoPlayPageDataComponent : IVideoPlayPageDataComponent {
 	                    document.getElementsByClassName('vjs-big-play-button')[0].dispatchEvent(evt);   
                     },500);
             """.trimIndent(),
-            //regex = "(.*)getvddr(.*)"
             regex = "(.*)filename(.*)"
         )
 
         if (url.isEmpty())
             return VideoPlayMedia("", "")
 
-//        val vjson = Jsoup.connect(url).ignoreContentType(true)
-//            .header("referer", Const.host)
-//            .get().body().text().apply {
-//                Log.i("数据", this)
-//            }
-//
-//        if (vjson.contains("error"))
-//            return VideoPlayMedia("", "")
-
-        val doc = Jsoup.parse(WebUtilIns.getRenderedHtmlCode(episodeUrl))
+        val doc = Jsoup.parse(WebUtilIns.getRenderedHtmlCode(episodeUrl, timeOut = 4500))
         val name = doc.getElementsByClass("wp-playlist-playing").first()?.text()
             ?.let { it.substring(it.indexOf(".") + 1) }?.trimAll() ?: ""
 
